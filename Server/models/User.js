@@ -20,17 +20,19 @@ const userSchema = mongoose.Schema({
     },
     firstname: {
         type:String,
+        required:true,
         maxlength: 50
     },
     lastname:{
         type:String,
+        maxlength: 50,
         required:true,
     },
     role : {
         type:Number,
         default: 0 
     },
-    image: String,
+    profilepic: String,
     token : {
         type: String,
     },
@@ -46,16 +48,29 @@ userSchema.pre('save', function( next ) {
         bcrypt.genSalt(salt, function(err, salt){
             if(err) return next(err);
     
-            bcrypt.hash(user.password, salt, function(err, hash){
-                if(err) return next(err);
-                user.password = hash 
+            bcrypt.hash(user.passwword,salt,function(err,hash){
+                if(err)return next(err)
+                user.password=hash
                 next()
             })
-        })
+                 })
     } else {
         next()
     }
 });
+
+userSchema.methods.comparePassword= function(plainPassword,cb){
+    bcrypt.compare(plainPassword,this.password, function(err,isMatch){
+        if(err) return cb(err)
+        if(isMatch){
+            return cb(null, user);
+        }
+        else{
+            return  cb(null, false, {message: 'Invalid password'});
+        }
+    })
+}
+
 
 
 
