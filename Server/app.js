@@ -7,13 +7,13 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 app.use(cors());
-const configuration = require("./config/key")
-app.use(express.json());
-app.use(cookieParser());
-const userRoute = require("./routes/users");
 
+app.use(cookieParser());
+const authRoute = require("./routes/auth");
+app.use(express.json());
+// mongoDB connection
 mongoose
-  .connect(configuration.mongoURI, {
+  .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
      })
@@ -24,7 +24,7 @@ mongoose
 
 //api routes
 
-app.use("/api/users", userRoute);
+app.use("/api/auth", authRoute);
 
 const PORT = process.env.PORT || 5000;
 
