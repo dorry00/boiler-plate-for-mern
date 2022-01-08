@@ -1,9 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const salt = 10;
-const jwt = require("jsonwebtoken");
-const moment = require("moment");
-
 const userSchema = mongoose.Schema({
   username: {
     type: String,
@@ -24,12 +19,16 @@ const userSchema = mongoose.Schema({
   profilepic: String,
   AccessToken: {
     type: String,
+    default:""
   },
   tokenExp: {
     type: Number,
   },
+  isVerified:{
+    type:Boolean,
+    default:false
+  },
+  
 },{timestamps:true});
-
-//generate authToken
 
 module.exports = mongoose.model("User", userSchema);
